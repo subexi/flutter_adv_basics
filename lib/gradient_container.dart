@@ -12,7 +12,6 @@ class GradientContainer extends StatelessWidget {
 
   final Color color1; // Final variables to hold the colors for the gradient
   final Color color2; // Final variables to hold the colors for the gradient
-  
 
   @override // Override the build method to create the UI
   Widget build(BuildContext context) {
@@ -31,8 +30,16 @@ class GradientContainer extends StatelessWidget {
           Image.asset(  
             'assets/images/quiz-logo.png',
             width: 300,
-            height: 300,
+            color:const Color.fromARGB(20, 255, 255, 255),
           ),
+          // Opacity(
+          //   opacity: 0.5,
+          //   child: Image.asset(  
+          //     'assets/images/quiz-logo.png',
+          //     width: 300,
+          //     height: 300,
+          //   ),
+          // ),
           const SizedBox(
             height: 20,
           ),
@@ -41,7 +48,7 @@ class GradientContainer extends StatelessWidget {
               'Learn Flutter the fun way!',
               style: TextStyle(
                 fontSize: 24, 
-                color: Colors.white
+                color: Color.fromARGB(150, 255, 255, 255)
               ),
             ),
           ),
@@ -49,24 +56,19 @@ class GradientContainer extends StatelessWidget {
             height: 20,
           ),
 
-          // ElevatedButton is a Material Design button that elevates when pressed
-          ElevatedButton(
+          // OutlinedButton
+          OutlinedButton.icon(
             onPressed: () {},
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.transparent,
-              padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(30),
+            style: OutlinedButton.styleFrom(
+              foregroundColor: Colors.white,
               ),
-            ),
-            child: Text(
-              'Start Quiz!',
-              style: TextStyle(
-                fontSize: 12,
-                color: Colors.white,
+              icon: const Icon(
+                Icons.arrow_right_alt
               ),
-            ),
-          ),
+              label: const Text(
+                'Start Quiz!'
+              ),
+            ), // OutlinedButton with an icon and a label, styled with a white foreground color
         ],
       ),
     );
