@@ -35,7 +35,7 @@ class _QuestionsScreenState extends State<QuestionsScreen> {
           const SizedBox(
             height: 30,
           ),
-          ...currentQuestion.answers.map((answer) { // Here we are using the spread operator (...) to spread the list of AnswerButton widgets that we are creating for each answer in the current question. The map method is used to iterate over each answer in the currentQuestion.answers list and create an AnswerButton for each one. The answer variable in the map function represents the current answer that we are iterating over.
+          ...currentQuestion.getShuffeledAnswers().map((answer) { // Here we are using the spread operator (...) to spread the list of AnswerButton widgets that we are creating for each answer in the current question. The map method is used to iterate over each answer in the currentQuestion.answers list and create an AnswerButton for each one. The answer variable in the map function represents the current answer that we are iterating over.
             return AnswerButton(
               answerText: answer, // Here we are displaying each answer for the current question. The answers property of the Question class is a list of strings that contains the possible answers for the question. We are using the map method to iterate over each answer in the list and create an AnswerButton for each one.
               onTap: () {}, // Here we are passing an empty function for onTap, but in a real application, you would want to implement some functionality here.
