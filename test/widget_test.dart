@@ -1,4 +1,4 @@
-// This is a basic Flutter widget test.
+// This is a Flutter widget test for the Quiz app.
 //
 // To perform an interaction with a widget in your test, use the WidgetTester
 // utility in the flutter_test package. For example, you can send tap and scroll
@@ -11,20 +11,33 @@ import 'package:flutter_test/flutter_test.dart';
 
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
+  testWidgets('Quiz app starts with StartScreen', (WidgetTester tester) async {
+    // Build our Quiz app and trigger a frame.
     await tester.pumpWidget(const Quiz());
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
+    // Verify that we start on the start screen with expected text.
+    expect(find.text('Learn Flutter the fun way!'), findsOneWidget);
+    expect(find.text('Start Quiz'), findsOneWidget);
+    expect(find.byIcon(Icons.arrow_right_alt), findsOneWidget);
 
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
+    // Verify that we're not on the questions screen yet.
+    expect(find.text('Question'), findsNothing);
+  });
+
+  testWidgets('Start Quiz button navigates to questions screen', (WidgetTester tester) async {
+    // Build our Quiz app and trigger a frame.
+    await tester.pumpWidget(const Quiz());
+
+    // Verify we start with the start screen.
+    expect(find.text('Learn Flutter the fun way!'), findsOneWidget);
+
+    // Tap the 'Start Quiz' button and trigger a frame.
+    await tester.tap(find.text('Start Quiz'));
     await tester.pump();
 
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+    // Verify that we navigated to the questions screen.
+    expect(find.text('Learn Flutter the fun way!'), findsNothing);
+    // The questions screen should now be visible
+    // (Note: actual question text depends on questions.dart content)
   });
 }
