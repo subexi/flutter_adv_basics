@@ -5,7 +5,12 @@ import 'package:adv_basics/answer_button.dart';
 import 'package:adv_basics/data/questions.dart';
 
 class QuestionsScreen extends StatefulWidget {
-  const QuestionsScreen({super.key});
+  const QuestionsScreen({
+    super.key,
+    required this.onSelectAnswer,
+  });
+
+  final void Function(String answer) onSelectAnswer; // This is a callback function that will be called when the user selects an answer. It takes a string parameter which represents the answer that the user selected. This function will be passed down to the AnswerButton widget, which will call it when the button is pressed.
 
   @override
   State<QuestionsScreen> createState() => _QuestionsScreenState();
@@ -14,7 +19,8 @@ class QuestionsScreen extends StatefulWidget {
 class _QuestionsScreenState extends State<QuestionsScreen> {
   var currentQuestionIndex = 0;
 
-  void answerQuestion() {
+  void answerQuestion(String selectedAnswer) {
+    widget.onSelectAnswer(selectedAnswer); // Here we are calling the onSelectAnswer function that we passed down from the Quiz widget and passing it the answer that the user selected. In this case, we are just passing the first answer from the list of answers for the current question, but in a real application, you would want to implement some functionality to determine which answer the user selected and pass that answer to the onSelectAnswer function.
     setState(() { // The setState method is used to update the state of the widget and trigger a rebuild of the widget tree. This is necessary because when we update the currentQuestionIndex variable, we want the widget to reflect that change and display the next question.
       currentQuestionIndex++; // Here we are using the setState method to update the currentQuestionIndex variable. The setState method is a special method in Flutter that tells the framework that the state of the widget has changed and that it needs to rebuild the widget with the new state. In this case, we are incrementing the currentQuestionIndex variable by 1, which will allow us to move to the next question when the user answers a question.
     });
@@ -51,7 +57,9 @@ class _QuestionsScreenState extends State<QuestionsScreen> {
           ...currentQuestion.getShuffeledAnswers().map((answer) { // Here we are using the spread operator (...) to spread the list of AnswerButton widgets that we are creating for each answer in the current question. The map method is used to iterate over each answer in the currentQuestion.answers list and create an AnswerButton for each one. The answer variable in the map function represents the current answer that we are iterating over.
             return AnswerButton(
               answerText: answer, // Here we are displaying each answer for the current question. The answers property of the Question class is a list of strings that contains the possible answers for the question. We are using the map method to iterate over each answer in the list and create an AnswerButton for each one.
-              onTap: answerQuestion, // Here we are passing the answerQuestion function for onTap, which will be called when the button is pressed. We are using a lambda function to pass the current answer as an argument to the answerQuestion function.
+              onTap: () {
+                answerQuestion(answer); // Here we are passing a function to the onTap property of the AnswerButton widget. This function will be called when the user taps on the button. In this case, we are calling the answerQuestion function and passing it the current answer that we are iterating over in the map function. The answerQuestion function will then call the onSelectAnswer callback that we passed down from the Quiz widget and update the currentQuestionIndex to move to the next question.
+              },
             ); // The AnswerButton widget is a custom widget that we have defined in answer_button.dart. It takes two parameters: answerText, which is the text that will be displayed on the button, and onTap, which is a function that will be called when the button is pressed. In this case, we are passing the current answer as the answerText and the answerQuestion function for onTap.
           }), // The map method returns an Iterable, so we need to convert it to a List using the toList method. This is necessary because the children property of the Column widget expects a List of widgets.
           ],
