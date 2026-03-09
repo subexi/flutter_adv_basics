@@ -1,6 +1,9 @@
-import 'package:adv_basics/questions_screen.dart';
 import 'package:flutter/material.dart';
+
 import 'package:adv_basics/start_screen.dart';
+import 'package:adv_basics/questions_screen.dart';
+import 'package:adv_basics/data/questions.dart';
+import 'package:adv_basics/results_screen.dart';
 
 class Quiz extends StatefulWidget {
   const Quiz({super.key});
@@ -20,7 +23,14 @@ class _QuizState extends State<Quiz> {
   }
 
   void chooseAnswer(String answer) {
-    selectedAnswers.add(answer); // Add the selected answer to the list of selected answers
+    selectedAnswers.add(answer);
+
+    if (selectedAnswers.length == questions.length) {
+      setState(() {
+        selectedAnswers.clear(); // Clear the selected answers list, this is necessary because we want to reset the quiz and start over when the user has answered all the questions. If we don't clear the list, it will still contain the answers from the previous quiz and it will cause issues when we try to calculate the score or display the results for the new quiz.
+        activeScreen = 'result-screen'; // All questions have been answered, you can navigate to the results screen or perform any other action here
+      });
+    }
   }
 
 
@@ -32,6 +42,10 @@ class _QuizState extends State<Quiz> {
       screenWidget = QuestionsScreen(
         onSelectAnswer: chooseAnswer,
       ); // If the active screen is the questions screen, update the screenWidget variable to the questions screen
+    }
+
+    if (activeScreen == 'result-screen') {
+      screenWidget = const ResultsScreen(); // If the active screen is the results screen, update the screenWidget variable to the results screen
     }
 
     return MaterialApp(
