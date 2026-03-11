@@ -29,6 +29,14 @@ class ResultsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final summaryData = getSummaryData(); // Get the summary data for the quiz results, this will be used to display a detailed summary of the quiz results on the results screen. The summaryData variable will hold a list of maps, where each map contains the question text, correct answer, and user's answer for each question in the quiz. 
+    final numTotalQuestions = questions.length; 
+    // Get the total number of questions in the quiz, this can be used to calculate the score or display the total number of questions in the results summary.
+    final numCorrectQuestions = summaryData.where((data) {  // Calculate the number of correct questions by filtering the summary data to only include the questions where the user's answer matches the correct answer, and then counting the number of items in the filtered list. This can be used to calculate the score or display the number of correct answers in the results summary.
+      return data['user_answer'] == data['correct_answer']; // Check if the user's answer matches the correct answer for each question in the summary data, this will be used to filter the summary data to only include the questions where the user answered correctly.
+    }).length; // Get the length of the filtered list to determine the number of correct questions, this can be used to calculate the score or display the number of correct answers in the results summary.  
+
+
     return SizedBox ( // A SizedBox is a widget that has a specific size. Here we are using it to make the child widget take up the full width of the screen.
       width: double.infinity, // double.infinity is a special value that tells the widget to take up as much space as possible in the given direction. In this case, it will take up the full width of the screen.
       child: Container( // A Container is a widget that allows you to customize its child widget with properties like padding, margin, color, etc. Here we are using it to add some margin around the child widget and to set the background color of the screen.
@@ -36,9 +44,15 @@ class ResultsScreen extends StatelessWidget {
         child: Column( // A Column is a widget that displays its children in a vertical array. Here we are using it to display the question text and the answer buttons vertically.
           mainAxisAlignment: MainAxisAlignment.center, // mainAxisAlignment is a property of the Column widget that controls how the children are aligned vertically. Here we are using MainAxisAlignment.center to center the children vertically within the Column.
           children: [
-            const Text('You answered X out of Y questions correctly!'),
-            const SizedBox(height: 30),
-            QuestionsSummary(getSummaryData()),
+            Text(
+              'You answered $numCorrectQuestions out of $numTotalQuestions questions correctly!'
+            ),
+            // Here we are displaying the number of correct questions and the total number of questions in the quiz, this can be used to calculate the score or display the results summary on the results screen.
+            const SizedBox(
+              height: 30
+            ),
+
+            QuestionsSummary(summaryData),
             SizedBox(height: 30),
             TextButton(
               onPressed: () {},
