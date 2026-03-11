@@ -1,45 +1,87 @@
 import 'package:flutter/material.dart';
 
 class QuestionsSummary extends StatelessWidget {
-  const QuestionsSummary(
-    this.summaryData,
-    {super.key}
-  );
+  const QuestionsSummary(this.summaryData, {super.key});
 
-  final List<Map<String, Object>> summaryData; // This is a final variable that will hold the summary data for the quiz results, it is marked as final because it will not change after it is initialized in the constructor. This variable will be used to display a detailed summary of the quiz results on the results screen. The summaryData variable is expected to be a list of maps, where each map contains the question text, correct answer, and user's answer for each question in the quiz.
+  final List<Map<String, Object>> summaryData;
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 300,
-      child: SingleChildScrollView( // The SingleChildScrollView widget is used to make the child widget scrollable when it exceeds the available space. In this case, we are using it to make the summary of the quiz results scrollable when there are many questions in the quiz and the summary exceeds the height of 300 pixels.
-        child: Column( // A Column is a widget that displays its children in a vertical array. Here we are using it to display the question text and the answer buttons vertically.
-          children: summaryData.map(
-            (data) { // Here we are using the map method to iterate over each item in the summaryData list and create a widget for each item. The data variable in the map function represents the current item that we are iterating over, which is a map containing the question text, correct answer, and user's answer for a specific question in the quiz. We will use this data to create a widget that displays this information in a structured way on the results screen.
-              return Row(
-                children: [
-                  Text(((data['question_index'] as int) + 1).toString()), // Here we are displaying the question index for each question in the quiz. The question index is stored in the 'question_index' key of the data map, and we are adding 1 to it because we want to display the question number starting from 1 instead of 0. We are also converting it to a string using the toString() method because the Text widget expects a string as its child.
-                  Expanded( //he Expanded widget is used to make the child widget take up the remaining space in the row, this is necessary because we want the question text and answers to take up as much space as possible while still leaving some space for the question index on the left.
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(data['question'] as String),
-                        const SizedBox(
-                          height: 5,
-                        ), // Here we are adding a SizedBox widget to add some vertical spacing between the question text and the answers. The height property of the SizedBox is set to 5, which means that there will be a 5 pixel gap between the question text and the answers.
-                        Text(data['correct_answer'] as String),
-                        Text(data['user_answer'] as String),
-                        const SizedBox(height: 5),
-                      ],
+      height: 500,
+      child: SingleChildScrollView(
+        child: Column(
+          children: summaryData.map((data) {
+            return Row(
+              children: [
+
+                // The FilledButton is styled to have a circular shape
+                // and its background color changes based on whether the user's answer is correct or not.
+                FilledButton(
+                  style: FilledButton.styleFrom(
+                    shape: CircleBorder(),
+                    backgroundColor: data['correct_answer'] == data['user_answer']
+                        ? const Color(0xFF80C5F7)
+                        : const Color(0xFFFF74F7),
+                  ),
+                  onPressed: () {},
+                  child: Text(
+                    ((data['question_index'] as int) + 1).toString(),
+                    style: const TextStyle(
+                      color: Color.fromARGB(255, 6, 6, 6),
                     ),
                   ),
-                ],
-              );
-            },
-          ).toList(),
+                ),
+
+                // The Expanded widget is used to make the column take up the remaining horizontal
+                // space in the row. Inside the column, we display the question text,
+                // the correct answer, and the user's answer. The color of the correct
+                // answer text changes based on whether the user's answer is correct or not.
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        data['question'] as String,
+                        style: const TextStyle(
+                          color: Color(0xFFE7CDF1),
+                          fontSize: 16,
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 5,
+                      ),
+
+                      // The color of the correct answer text changes based on whether
+                      // the user's answer is correct or not.
+                      Text(
+                        data['correct_answer'] as String,
+                        style: TextStyle(
+                          color: data['correct_answer'] == data['user_answer']
+                              ? const Color(0xFF80C5F7)
+                              : const Color(0xFFFF74F7),
+                              fontSize: 12,
+                        ),
+                      ),
+
+                      // The user's answer is displayed in a fixed color (0xFF80C5F7)
+                      // regardless of whether it is correct or not.
+                      Text(
+                        data['user_answer'] as String,
+                        style: const TextStyle(
+                          color: Color(0xFF80C5F7),
+                          fontSize: 12,
+                        ),
+                      ),
+                      const SizedBox(height: 5),
+                    ],
+                  ),
+                ),
+              ],
+            );
+          }).toList(),
         ),
       ),
     );
   }
 }
-

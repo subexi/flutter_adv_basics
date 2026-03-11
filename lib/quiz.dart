@@ -32,6 +32,13 @@ class _QuizState extends State<Quiz> {
     }
   }
 
+  void restartQuiz() {
+    setState(() {
+      selectedAnswers.clear();
+      activeScreen = 'start-screen';
+    });
+  }
+
 
   @override
   Widget build(BuildContext context) { // The build method is responsible for building the UI of the app, it will return a widget that represents the current state of the app. In this case, it will return a MaterialApp widget that contains a Scaffold widget with a Container as its body. The Container will have a gradient background and will display the appropriate screen based on the value of activeScreen.
@@ -46,6 +53,7 @@ class _QuizState extends State<Quiz> {
     if (activeScreen == 'result-screen') {
       screenWidget = ResultsScreen(
         chosenAnswers: selectedAnswers,
+        onRestart: restartQuiz,
       ); // If the active screen is the results screen, update the screenWidget variable to the results screen
     }
 

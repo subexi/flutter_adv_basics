@@ -6,22 +6,23 @@ import 'package:adv_basics/questions_summary.dart';
 class ResultsScreen extends StatelessWidget {
   const ResultsScreen({
     super.key,
-    required this.chosenAnswers // This is a required parameter that will be passed down from the Quiz widget, it will contain the list of answers that the user selected during the quiz. This information can be used to calculate the score or display the results on the results screen.
+    required this.chosenAnswers,
+    required this.onRestart,
   });
 
-  final List<String> chosenAnswers; // This is a final variable that will hold the list of answers that the user selected during the quiz, it is marked as final because it will not change after it is initialized in the constructor. This variable can be used to calculate the score or display the results on the results screen.
+  final List<String> chosenAnswers;
+  final void Function() onRestart;
 
-  List<Map<String, Object>> getSummaryData() { // This is a method that will generate a summary of the quiz results based on the chosen answers and the questions. It will return a list of maps, where each map contains the question text, the correct answer, and the user's answer. This information can be used to display a detailed summary of the quiz results on the results screen.
-    final List<Map<String, Object>> summary = []; // Initialize an empty list to hold the summary data, this list will be populated with the question text, correct answer, and user's answer for each question in the quiz.
-    for (var i = 0; i < chosenAnswers.length; i++) { // Loop through the chosen answers and populate the summary list with the question text, correct answer, and user's answer for each question in the quiz. The loop will iterate through the chosenAnswers list and use the index to access the corresponding question from the questions list and the correct answer from the answers list.
-      summary.add( // Add a new map to the summary list for each question, this map will contain the question text, correct answer, and user's answer. The keys of the map are 'question_index', 'question', 'correct_answer', and 'user_answer', and the values are the corresponding data for each question in the quiz.
-        {
-          'question_index': i, // Add the index of the question to the summary, this can be used to display the question number in the results summary.
-          'question': questions[i].text, // Add the question text to the summary, this can be used to display the question in the results summary.
-          'correct_answer': questions[i].answers[0], // Add the correct answer to the summary, this can be used to display the correct answer in the results summary.
-          'user_answer': chosenAnswers[i], // Add the user's answer to the summary, this can be used to display the user's answer in the results summary.
-        }
-      );
+  List<Map<String, Object>> getSummaryData() {
+    final List<Map<String, Object>> summary = [];
+
+    for (var i = 0; i < chosenAnswers.length; i++) {
+      summary.add({
+        'question_index': i,
+        'question': questions[i].text,
+        'correct_answer': questions[i].answers[0],
+        'user_answer': chosenAnswers[i],
+      });
     }
 
     return summary;
@@ -29,34 +30,50 @@ class ResultsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final summaryData = getSummaryData(); // Get the summary data for the quiz results, this will be used to display a detailed summary of the quiz results on the results screen. The summaryData variable will hold a list of maps, where each map contains the question text, correct answer, and user's answer for each question in the quiz. 
-    final numTotalQuestions = questions.length; 
-    // Get the total number of questions in the quiz, this can be used to calculate the score or display the total number of questions in the results summary.
-    final numCorrectQuestions = summaryData.where((data) {  // Calculate the number of correct questions by filtering the summary data to only include the questions where the user's answer matches the correct answer, and then counting the number of items in the filtered list. This can be used to calculate the score or display the number of correct answers in the results summary.
-      return data['user_answer'] == data['correct_answer']; // Check if the user's answer matches the correct answer for each question in the summary data, this will be used to filter the summary data to only include the questions where the user answered correctly.
-    }).length; // Get the length of the filtered list to determine the number of correct questions, this can be used to calculate the score or display the number of correct answers in the results summary.  
+    final summaryData = getSummaryData();
+    final numTotalQuestions = questions.length;
+    final numCorrectQuestions = summaryData.where((data) {
+      return data['user_answer'] == data['correct_answer'];
+    }).length;
 
-
-    return SizedBox ( // A SizedBox is a widget that has a specific size. Here we are using it to make the child widget take up the full width of the screen.
-      width: double.infinity, // double.infinity is a special value that tells the widget to take up as much space as possible in the given direction. In this case, it will take up the full width of the screen.
-      child: Container( // A Container is a widget that allows you to customize its child widget with properties like padding, margin, color, etc. Here we are using it to add some margin around the child widget and to set the background color of the screen.
-        margin: const EdgeInsets.all(40), // margin is a property of the Container widget that adds empty space around the child widget. Here we are using EdgeInsets.all(20) to add a margin of 20 pixels on all sides of the child widget.
-        child: Column( // A Column is a widget that displays its children in a vertical array. Here we are using it to display the question text and the answer buttons vertically.
-          mainAxisAlignment: MainAxisAlignment.center, // mainAxisAlignment is a property of the Column widget that controls how the children are aligned vertically. Here we are using MainAxisAlignment.center to center the children vertically within the Column.
+    return SizedBox(
+      width: double.infinity,
+      child: Container(
+        margin: const EdgeInsets.all(40),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(
-              'You answered $numCorrectQuestions out of $numTotalQuestions questions correctly!'
+            Center(
+              child: Text(
+                'You answered $numCorrectQuestions out of $numTotalQuestions questions correctly!',
+                textAlign: TextAlign.center,
+                style: const TextStyle(
+                  fontSize: 20,
+                  color: Color(0xFFcc95ea),
+                ),
+              ),
             ),
-            // Here we are displaying the number of correct questions and the total number of questions in the quiz, this can be used to calculate the score or display the results summary on the results screen.
             const SizedBox(
-              height: 30
+              height: 30,
             ),
-
             QuestionsSummary(summaryData),
-            SizedBox(height: 30),
-            TextButton(
-              onPressed: () {},
-              child: Text('Restart Quiz'),
+            const SizedBox(height: 30),
+
+            // The TextButton is styled with a foreground color and an icon, and it calls the onRestart
+            // function when pressed, which will trigger the restartQuiz function in the Quiz widget and
+            // reset the quiz to the start screen.
+            TextButton.icon(
+              onPressed: onRestart,
+              style: TextButton.styleFrom(
+                foregroundColor: const Color(0xFFE7CDF1),
+              ),
+              icon: const Icon(Icons.restart_alt, size: 30),
+              label: const Text(
+                'Restart Quiz!',
+                style: TextStyle(
+                  fontSize: 14,
+                ),
+              ),
             ),
           ],
         ),
