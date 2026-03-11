@@ -10,29 +10,35 @@ class QuestionsSummary extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: summaryData.map(
-        (data) { // Here we are using the map method to iterate over each item in the summaryData list and create a widget for each item. The data variable in the map function represents the current item that we are iterating over, which is a map containing the question text, correct answer, and user's answer for a specific question in the quiz. We will use this data to create a widget that displays this information in a structured way on the results screen.
-          return Row(
-            children: [
-              Text(((data['question_index'] as int) + 1).toString()), // Here we are displaying the question index for each question in the quiz. The question index is stored in the 'question_index' key of the data map, and we are adding 1 to it because we want to display the question number starting from 1 instead of 0. We are also converting it to a string using the toString() method because the Text widget expects a string as its child.
-              Expanded( //he Expanded widget is used to make the child widget take up the remaining space in the row, this is necessary because we want the question text and answers to take up as much space as possible while still leaving some space for the question index on the left.
-                child: Column(
-                  children: [
-                    Text(data['question'] as String),
-                    const SizedBox(
-                      height: 5,
-                    ), // Here we are adding a SizedBox widget to add some vertical spacing between the question text and the answers. The height property of the SizedBox is set to 5, which means that there will be a 5 pixel gap between the question text and the answers.
-                    Text(data['correct_answer'] as String),
-                    Text(data['user_answer'] as String),
-                    const SizedBox(height: 5),
-                  ],
-                ),
-              ),
-            ],
-          );
-        },
-      ).toList(),
+    return SizedBox(
+      height: 300,
+      child: SingleChildScrollView( // The SingleChildScrollView widget is used to make the child widget scrollable when it exceeds the available space. In this case, we are using it to make the summary of the quiz results scrollable when there are many questions in the quiz and the summary exceeds the height of 300 pixels.
+        child: Column( // A Column is a widget that displays its children in a vertical array. Here we are using it to display the question text and the answer buttons vertically.
+          children: summaryData.map(
+            (data) { // Here we are using the map method to iterate over each item in the summaryData list and create a widget for each item. The data variable in the map function represents the current item that we are iterating over, which is a map containing the question text, correct answer, and user's answer for a specific question in the quiz. We will use this data to create a widget that displays this information in a structured way on the results screen.
+              return Row(
+                children: [
+                  Text(((data['question_index'] as int) + 1).toString()), // Here we are displaying the question index for each question in the quiz. The question index is stored in the 'question_index' key of the data map, and we are adding 1 to it because we want to display the question number starting from 1 instead of 0. We are also converting it to a string using the toString() method because the Text widget expects a string as its child.
+                  Expanded( //he Expanded widget is used to make the child widget take up the remaining space in the row, this is necessary because we want the question text and answers to take up as much space as possible while still leaving some space for the question index on the left.
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(data['question'] as String),
+                        const SizedBox(
+                          height: 5,
+                        ), // Here we are adding a SizedBox widget to add some vertical spacing between the question text and the answers. The height property of the SizedBox is set to 5, which means that there will be a 5 pixel gap between the question text and the answers.
+                        Text(data['correct_answer'] as String),
+                        Text(data['user_answer'] as String),
+                        const SizedBox(height: 5),
+                      ],
+                    ),
+                  ),
+                ],
+              );
+            },
+          ).toList(),
+        ),
+      ),
     );
   }
 }
