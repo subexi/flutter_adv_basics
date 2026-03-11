@@ -26,8 +26,7 @@ class _QuizState extends State<Quiz> {
     selectedAnswers.add(answer);
 
     if (selectedAnswers.length == questions.length) {
-      setState(() {
-        selectedAnswers.clear(); // Clear the selected answers list, this is necessary because we want to reset the quiz and start over when the user has answered all the questions. If we don't clear the list, it will still contain the answers from the previous quiz and it will cause issues when we try to calculate the score or display the results for the new quiz.
+      setState(() { // Clear the selected answers list, this is necessary because we want to reset the quiz and start over when the user has answered all the questions. If we don't clear the list, it will still contain the answers from the previous quiz and it will cause issues when we try to calculate the score or display the results for the new quiz.
         activeScreen = 'result-screen'; // All questions have been answered, you can navigate to the results screen or perform any other action here
       });
     }
@@ -35,7 +34,7 @@ class _QuizState extends State<Quiz> {
 
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) { // The build method is responsible for building the UI of the app, it will return a widget that represents the current state of the app. In this case, it will return a MaterialApp widget that contains a Scaffold widget with a Container as its body. The Container will have a gradient background and will display the appropriate screen based on the value of activeScreen.
     Widget screenWidget = StartScreen(switchScreen); // Initialize the screenWidget variable to the start screen, this will be used to determine which screen to display based on the value of activeScreen
 
     if (activeScreen == 'question-screen') {
@@ -45,7 +44,9 @@ class _QuizState extends State<Quiz> {
     }
 
     if (activeScreen == 'result-screen') {
-      screenWidget = const ResultsScreen(); // If the active screen is the results screen, update the screenWidget variable to the results screen
+      screenWidget = ResultsScreen(
+        chosenAnswers: selectedAnswers,
+      ); // If the active screen is the results screen, update the screenWidget variable to the results screen
     }
 
     return MaterialApp(

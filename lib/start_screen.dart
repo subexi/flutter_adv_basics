@@ -40,7 +40,7 @@ class StartScreen extends StatelessWidget {
           ),
           OutlinedButton.icon(
             onPressed: () {
-              startQuiz();
+              startQuiz(); // Call the startQuiz function when the button is pressed, this will trigger the switchScreen function in the Quiz widget and navigate to the questions screen
             },
             style: OutlinedButton.styleFrom(
               foregroundColor: Colors.white,
